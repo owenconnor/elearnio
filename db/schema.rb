@@ -10,13 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_07_111708) do
+ActiveRecord::Schema.define(version: 2023_03_07_112315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "author_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_author_profiles_on_user_id"
+  end
+
   create_table "student_profiles", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_student_profiles_on_user_id"
@@ -33,5 +40,6 @@ ActiveRecord::Schema.define(version: 2023_03_07_111708) do
     t.index ["id", "author_profile_id", "student_profile_id"], name: "index_users_on_id_and_author_profile_id_and_student_profile_id"
   end
 
+  add_foreign_key "author_profiles", "users"
   add_foreign_key "student_profiles", "users"
 end
