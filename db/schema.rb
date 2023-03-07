@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_07_112315) do
+ActiveRecord::Schema.define(version: 2023_03_07_120620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,22 @@ ActiveRecord::Schema.define(version: 2023_03_07_112315) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_author_profiles_on_user_id"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string "title"
+    t.integer "author_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "enrollments", force: :cascade do |t|
+    t.bigint "student_profile_id", null: false
+    t.bigint "course_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["course_id"], name: "index_enrollments_on_course_id"
+    t.index ["student_profile_id"], name: "index_enrollments_on_student_profile_id"
   end
 
   create_table "student_profiles", force: :cascade do |t|
@@ -41,5 +57,7 @@ ActiveRecord::Schema.define(version: 2023_03_07_112315) do
   end
 
   add_foreign_key "author_profiles", "users"
+  add_foreign_key "enrollments", "courses"
+  add_foreign_key "enrollments", "student_profiles"
   add_foreign_key "student_profiles", "users"
 end

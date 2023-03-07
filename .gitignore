@@ -30,3 +30,5 @@ test/*/.keep
 /config/master.key
 
 .idea
+
+.env
