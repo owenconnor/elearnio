@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe V1::CoursesController, type: :request do
-  let(:user) { User.create(first_name: "Gisely", last_name: "Nunes", email: "giselynunes@dance.com")  }
-  let(:author_profile) { AuthorProfile.create(user: user) }
-  let(:course) {  Course.create(title: "Soccer in 1970's", author_profile_id: author_profile.id) }
-  let(:valid_params) { {"title": "Mega Dance Party", "author_profile_id": author_profile.id} }
+  let(:user) { create :user, :with_author_profile }
+  let(:course) { create :course }
+  let(:valid_params) { {"title": "Mega Dance Party", "author_profile_id": user.author_profile.id } }
+
   describe 'POST #create' do
     context 'when valid params are passed' do
 
@@ -17,9 +17,17 @@ RSpec.describe V1::CoursesController, type: :request do
         expect(response.status).to eq(201)
       end
 
-      it 'returns the created course' do
+      it 'uses the CourseShowSerializer to format the response data' do
         post '/v1/courses', params: { course: valid_params }
-        expect(JSON.parse(response.body)).to eq(Course.last.as_json)
+        expect(response.body).to include(valid_params[:title])
+        expect(response.body).to include(user.email)
+      end
+
+      it 'returns the created course with correct attributes' do
+        post '/v1/courses', params: { course: valid_params }
+        json_response = JSON.parse(response.body)
+        expect(json_response['title']).to eq(valid_params[:title])
+        expect(json_response['author']['first_name']).to eq(user.first_name)
       end
     end
 
@@ -39,7 +47,7 @@ RSpec.describe V1::CoursesController, type: :request do
       end
 
       context 'when the title does not exist' do
-        let(:invalid_title_params) { {"title": "", "author_profile_id": author_profile.id} }
+        let(:invalid_title_params) { {"title": "", "author_profile_id": user.author_profile.id} }
         it 'returns a 422 status code' do
           post '/v1/courses', params: { course: invalid_title_params }
           expect(response.status).to eq(422)
@@ -48,22 +56,18 @@ RSpec.describe V1::CoursesController, type: :request do
         it 'returns the errors' do
           post '/v1/courses', params: { course: invalid_title_params }
           #TODO: fix this the params for this test
-          expect(JSON.parse(response.body)).to eq("errors"=>["Title can't be blank"], "params"=>{"author_profile_id"=>"#{author_profile.id}", "title"=>""})
+          expect(JSON.parse(response.body)).to eq("errors"=>["Title can't be blank"], "params"=>{"author_profile_id"=>"#{user.author_profile.id}", "title"=>""})
         end
       end
     end
   end
 
   describe 'GET #index' do
+    let!(:courses) { create_list(:course, 3) }
 
     it 'returns a list of courses' do
-      courses = []
-      3.times do |i|
-        courses << Course.create(title: "Brazilian Irish Cooking #{i+1}", author_profile_id: author_profile.id)
-      end
-
       get '/v1/courses'
-      expect(JSON.parse(response.body)).to eq(courses.as_json)
+      expect(JSON.parse(response.body).length).to eq(courses.length)
     end
 
     it 'returns a 200 status code' do
@@ -73,14 +77,47 @@ RSpec.describe V1::CoursesController, type: :request do
   end
 
   describe 'GET #show' do
-    it 'returns the requested course' do
+    # it 'returns the requested course' do
+    #   get "/v1/courses/#{course.id}"
+    #   expect(JSON.parse(response.body)).to eq(course.as_json)
+    # end
+
+    it 'uses the CourseShowSerializer to format the response data' do
       get "/v1/courses/#{course.id}"
-      expect(JSON.parse(response.body)).to eq(course.as_json)
+      expect(response.body).to include(course.title)
+      expect(response.body).to include(course.author_profile.user.email)
+    end
+
+    it 'returns the course with correct attributes' do
+      get "/v1/courses/#{course.id}"
+      json_response = JSON.parse(response.body)
+      expect(json_response['title']).to eq(course.title)
+      expect(json_response['author']['first_name']).to eq(course.author_profile.user.first_name)
     end
 
     it 'returns a 200 status code' do
       get "/v1/courses/#{course.id}"
       expect(response.status).to eq(200)
+    end
+
+    context "with students" do
+      let(:course_with_students) { create :course, :with_students }
+      it 'returns the course with students' do
+        get "/v1/courses/#{course_with_students.id}"
+        json_response = JSON.parse(response.body)
+        expect(json_response['students'].length).to eq(course_with_students.student_profiles.length)
+      end
+
+    end
+
+    context "with learning paths" do
+      let!(:course_with_learning_paths) { create :course, :with_learning_paths}
+      it 'returns the course with learning paths' do
+        get "/v1/courses/#{course_with_learning_paths.id}"
+        json_response = JSON.parse(response.body)
+        expect(json_response['learning_paths'].length).to eq(course_with_learning_paths.learning_paths.length)
+      end
+
     end
   end
 
@@ -94,8 +131,9 @@ RSpec.describe V1::CoursesController, type: :request do
 
       it "returns the updated course record" do
         put "/v1/courses/#{course.id}", params: { course: update_params }
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)["title"]).to eq(update_params[:title])
+        expect(json_response["title"]).to eq(update_params[:title])
       end
     end
 
@@ -110,7 +148,7 @@ RSpec.describe V1::CoursesController, type: :request do
 
     context "when the specified id is not found" do
       it "returns a 404 error response" do
-        put "/v1/courses/#{course.id + 1}", params: { course: { name: "New Course Name" } }
+        put "/v1/courses/#{course.id + 1000}", params: { course: { name: "New Course Name" } }
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -118,18 +156,12 @@ RSpec.describe V1::CoursesController, type: :request do
 
 
   describe 'DELETE /courses/:id' do
-    #TODO: fix these delete tests
+    let!(:course_to_be_deleted) { create :course }
     context 'when the course exists' do
-      let(:course_to_be_deleted) { Course.create(title: "Prince Andrew's guide to Dating", author_profile_id: author_profile.id) }
-      Rails.logger.info "Courses before: #{Course.all.count}"
-      pp "Courses before: #{Course.all.count}"
-
       it 'deletes the course' do
         expect {
           delete "/v1/courses/#{course_to_be_deleted.id}"
         }.to change(Course, :count).by(-1)
-        # Rails.logger.debug "Courses before: #{Course.reload.all.count}"
-        # pp "Courses before: #{Course.reload.all.count}"
       end
 
       it 'returns a success message' do
@@ -142,8 +174,9 @@ RSpec.describe V1::CoursesController, type: :request do
     context 'when the course does not exist' do
       it 'returns a not found error' do
         delete '/v1/courses/9999'
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:not_found)
-        expect(response.body).to eq({ "error": "Couldn't find Course with 'id'=9999" }.to_json)
+        expect(json_response["error"]).to eq("Couldn't find Course with 'id'=9999")
       end
     end
 
@@ -153,6 +186,7 @@ RSpec.describe V1::CoursesController, type: :request do
       end
 
       it 'returns an unprocessable entity error' do
+        #TODO: why could a course not be deleted?
         delete "/v1/courses/#{course_to_be_deleted.id}"
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to match_json_expression({ error: 'Course could not be deleted' })
