@@ -55,6 +55,28 @@ class V1::CoursesController < ApplicationController
     render json: { error: e.to_s  }, status: :unprocessable_entity
   end
 
+  def enroll
+    course = Course.find(params[:id])
+    student_profile = StudentProfile.find(params[:student_profile_id])
+    course_enrollment = course.enroll_student(student_profile)
+    if course_enrollment.persisted?
+      render json: course_enrollment, status: :created
+    else
+      render json: { errors: course_enrollment.errors.full_messages, params: course_params }, status: :unprocessable_entity
+    end
+  rescue ActiveRecord::RecordNotFound => e
+    record_not_found(e)
+  end
+
+  def complete
+    course = Course.find(params[:id])
+    student_profile = StudentProfile.find(params[:student_profile_id])
+    course.complete_course(student_profile)
+    render json: { message: 'Course completed successfully' }, status: :ok
+  rescue ActiveRecord::RecordNotFound => e
+    record_not_found(e)
+  end
+
   private
     def course_params
       params.require(:course).permit(:title, :author_profile_id)

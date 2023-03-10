@@ -4,6 +4,9 @@ Rails.application.routes.draw do
     resources :student_profiles
     resources :learning_paths
     resources :author_profiles
-    resources :courses
+    resources :courses do
+      post 'enroll', on: :member
+      post 'complete', on: :member
+    end
   end
 end
