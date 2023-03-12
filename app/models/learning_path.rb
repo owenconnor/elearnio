@@ -5,11 +5,6 @@ class LearningPath < ApplicationRecord
 
   validates :title, presence: true
 
-  scope :by_student, -> (student_profile_id) { joins(:learning_path_enrollments).where(learning_path_enrollments: { student_profile_id: student_profile_id }) }
-  scope :with_students, -> { joins(:student_profiles) }
-  scope :with_courses, -> { joins(:courses) }
-  scope :with_learning_path_enrollments, -> { joins(:learning_path_enrollments) }
-
   def next_course(student_profile, completed_course_id)
     completed_course = Course.find(completed_course_id)
     if subscribed?(student_profile)

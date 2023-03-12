@@ -19,11 +19,12 @@ class V1::LearningPathsController < ApplicationController
   def create
     learning_path = LearningPath.create(learning_path_params)
     if learning_path.persisted?
-      pp "======== learning_path:#{ learning_path }==============="
       render json: learning_path, status: :created
     else
       render json: { errors: learning_path.errors.full_messages, params: learning_path_params }, status: :unprocessable_entity
     end
+  rescue RecordNotFound => e
+    record_not_found(e)
   end
 
   def update

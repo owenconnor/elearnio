@@ -130,4 +130,6 @@ RSpec.describe "LearningPaths", type: :request do
       expect(response.body).to eq({"message": 'Learning Path deleted successfully'}.to_json)
     end
   end
+
+
 end
