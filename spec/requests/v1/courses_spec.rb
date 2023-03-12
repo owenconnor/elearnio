@@ -194,4 +194,126 @@ RSpec.describe V1::CoursesController, type: :request do
     end
   end
 
+  describe  'POST /courses/:id/enroll' do
+    let!(:course_to_be_enrolled) { create :course }
+    let(:student) { create :user }
+    let(:enroll_params) { { student_profile_id: student.student_profile.id } }
+
+    context 'when the course exists' do
+      it 'enrolls the student in the course' do
+        expect {
+          post "/v1/courses/#{course_to_be_enrolled.id}/enroll", params: enroll_params
+        }.to change(course_to_be_enrolled.student_profiles, :count).by(1)
+      end
+
+      it 'returns a success message' do
+        post "/v1/courses/#{course_to_be_enrolled.id}/enroll", params: enroll_params
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:created)
+        expect(json_response["student_profile_id"]).to eq(enroll_params[:student_profile_id])
+        expect(json_response["course_id"]).to eq(course_to_be_enrolled.id)
+        expect(json_response["status"]).to eq("enrolled")
+      end
+    end
+
+    context 'when the course does not exist' do
+      it 'returns a not found error' do
+        post '/v1/courses/9999/enroll', params: { course: enroll_params }
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:not_found)
+        expect(json_response["error"]).to eq("Couldn't find Course with 'id'=9999")
+      end
+    end
+
+    context 'when the course could not be enrolled' do
+      # before do
+      #   allow_any_instance_of(Course).to receive(:enroll).and_return(false)
+      # end
+
+      context 'when the student is already enrolled' do
+        before do
+          course_to_be_enrolled.enroll_student(student.student_profile)
+        end
+
+        it 'returns an unprocessable entity error' do
+          post "/v1/courses/#{course_to_be_enrolled.id}/enroll", params: enroll_params
+          json_response = JSON.parse(response.body)
+          pp json_response
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json_response["errors"].join).to eq("Student is already enrolled in this course")
+        end
+      end
+
+      context 'when the student is the author of the course' do
+        before do
+          course_to_be_enrolled.update(author_profile_id: student.author_profile.id)
+        end
+
+        it 'returns an unprocessable entity error' do
+          post "/v1/courses/#{course_to_be_enrolled.id}/enroll", params: enroll_params
+          json_response = JSON.parse(response.body)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json_response["errors"].join).to eq("Student is the author of this course")
+        end
+      end
+    end
+  end
+
+  describe  'POST /courses/:id/complete' do
+    let!(:course_to_be_completed) { create :course }
+    let(:student) { create :user }
+    let(:complete_params) { { student_profile_id: student.student_profile.id } }
+
+    context 'when the course exists' do
+      it 'completes the course for the student' do
+        course_to_be_completed.enroll_student(student.student_profile)
+        expect {
+          post "/v1/courses/#{course_to_be_completed.id}/complete", params: complete_params
+        }.to change(course_to_be_completed.student_profiles, :count).by(0)
+      end
+
+      it 'returns a success message' do
+        course_to_be_completed.enroll_student(student.student_profile)
+        post "/v1/courses/#{course_to_be_completed.id}/complete", params: complete_params
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+        expect(json_response["message"]).to eq("Course completed successfully")
+      end
+    end
+
+    context 'when the course does not exist' do
+      it 'returns a not found error' do
+        post '/v1/courses/9999/complete', params: { course: complete_params }
+        json_response = JSON.parse(response.body)
+        expect(response).to have_http_status(:not_found)
+        expect(json_response["error"]).to eq("Couldn't find Course with 'id'=9999")
+      end
+    end
+
+    context 'when the course could not be completed' do
+      context 'when the student is not enrolled' do
+        it 'returns an unprocessable entity error' do
+          post "/v1/courses/#{course_to_be_completed.id}/complete", params: complete_params
+          json_response = JSON.parse(response.body)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json_response["errors"].join).to eq("Student is not enrolled in this course")
+        end
+      end
+
+      context 'when the student is already completed the course' do
+        before do
+          course_to_be_completed.enroll_student(student.student_profile)
+          course_to_be_completed.complete_course(student.student_profile)
+        end
+
+        it 'returns an unprocessable entity error' do
+          post "/v1/courses/#{
+            course_to_be_completed.id}/complete", params: complete_params
+          json_response = JSON.parse(response.body)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(json_response["errors"].join).to eq("Student has already completed this course")
+        end
+      end
+    end
+  end
 end
