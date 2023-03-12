@@ -1,4 +1,26 @@
+# A model for a user of the application. A user can be a student or an author.
 class User < ApplicationRecord
+  #@!attribute email
+  # @return [String] The email address of the user.
+  # @!attribute first_name
+  # @return [String] The first name of the user.
+  # @!attribute last_name
+  # @return [String] The last name of the user.
+  # @!attribute created_at
+  # @return [DateTime] The date and time the user was created.
+  # @!attribute updated_at
+  # @return [DateTime] The date and time the user was last updated.
+  # @!attribute id
+  # @return [Integer] The ID of the user.
+  # @!attribute author_profile
+  # @return [AuthorProfile] The author profile of the user if they are an author.
+  # @!attribute student_profile
+  # @return [StudentProfile] The student profile of the user if they are a student.
+  # @!attribute author_profile_id
+  # @return [Integer] The ID of the author profile of the user if they are an author.
+  # @!attribute student_profile_id
+  # @return [Integer] The ID of the student profile of the user if they are a student.
+
   has_one :author_profile
   has_one :student_profile
 
