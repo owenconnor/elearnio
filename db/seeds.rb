@@ -1,24 +1,9 @@
 require 'faker'
+require 'factory_bot_rails'
 
 # Create some students
-50.times do
-  user = User.create(
-    first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
-    email: Faker::Internet.email,
-  )
-  user.create_student_profile
-end
+create_list(:user, 50)
 
-# Create some authors
-10.times do
-  user = User.create(
-    first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
-    email: Faker::Internet.email,
-  )
-  user.create_author_profile
-end
 
 #Create Author/Student Profiles
 # 10.times do
