@@ -1,14 +1,7 @@
 class CourseIndexSerializer < ActiveModel::Serializer
-  attributes :id, :title, :author, :students, :learning_paths, :created_at, :updated_at
+  attributes :id, :title, :author_profile_id, :students, :learning_paths, :created_at, :updated_at
 
-  def author
-    {
-      id: object.author_profile.id,
-      first_name: object.author_profile.user.first_name,
-      last_name: object.author_profile.user.last_name,
-      email: object.author_profile.user.email
-    }
-  end
+  has_one :author_profile
 
   def students
     object.student_profiles.map(&:id)
