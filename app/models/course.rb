@@ -22,10 +22,8 @@ class Course < ApplicationRecord
   has_many :student_profiles, through: :course_enrollments
   has_and_belongs_to_many :learning_paths
 
-
   validates :title, presence: true
   validates :author_profile_id, numericality: { only_integer: true }, presence: true
-  # validates :course_enrollments, uniqueness: { scope: :student_profile_id } TODO: WTF here?
 
   scope :by_author, -> (author_profile_id) { where(author_profile_id: author_profile_id) }
   scope :by_learning_path, -> (learning_path_id) { joins(:learning_paths).where(learning_paths: { id: learning_path_id }) }
