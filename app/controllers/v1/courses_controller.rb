@@ -102,7 +102,13 @@ class V1::CoursesController < ApplicationController
     course = Course.find(params[:id])
     student_profile = StudentProfile.find(params[:student_profile_id])
     course.complete_course(student_profile)
-    render json: { message: 'Course completed successfully' }, status: :ok
+    if course.errors.any?
+      render json: { errors: course.errors.full_messages, params: course_params }, status: :unprocessable_entity
+    else
+      # render json: course, status: :ok
+      render json: { message: 'Course completed successfully' }, status: :ok
+    end
+
   rescue ActiveRecord::RecordNotFound => e
     record_not_found(e)
   end
