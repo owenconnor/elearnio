@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def index
-    users = User.all
+    users = User.includes(:student_profile, :author_profile).all
     render json: users, each_serializer: UserIndexSerializer, status: :ok
   end
 
