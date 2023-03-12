@@ -6,7 +6,7 @@ class Course < ApplicationRecord
 
   validates :title, presence: true
   validates :author_profile_id, numericality: { only_integer: true }, presence: true
-  validates :course_enrollments, uniqueness: { scope: :student_profile_id }
+  # validates :course_enrollments, uniqueness: { scope: :student_profile_id } TODO: WTF here?
 
 
   scope :by_author, -> (author_profile_id) { where(author_profile_id: author_profile_id) }
@@ -33,7 +33,7 @@ class Course < ApplicationRecord
       errors.add(:base, "Student is already enrolled in this course")
       return false
     else
-      course_enrollments.create(student_profile: student_profile)
+      course_enrollments.create(student_profile: student_profile, status: "enrolled")
     end
   end
 
