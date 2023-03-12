@@ -1,5 +1,5 @@
 class CourseShowSerializer < ActiveModel::Serializer
-  attributes :id, :title, :author, :students,  :learning_paths, :created_at, :updated_at
+  attributes :id, :title, :author, :students, :learning_paths, :created_at, :updated_at
 
   def author
     {
