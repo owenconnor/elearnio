@@ -11,6 +11,25 @@ class V1::UsersController < ApplicationController
     render json: { params: params, error: e.to_s }, status: :not_found
   end
 
+  # @api {post} /users
+  # Create a new user.
+  # @example Creating a new user
+  #   POST /users
+  #   { user: {
+  #     first_name: "John",
+  #     last_name: "Doe",
+  #     email: "johndoe@example.com"
+  #   }
+  #   =>
+  #   {
+  #     "id": 1,
+  #     "name": "John Doe",
+  #     "email": "johndoe@example.com"
+  #   }
+  # This is a method is used to create a new user.
+  # @param [String] first_name The first name of the user.
+  # @param [String] last_name The last name of the user.
+  # @param [String] email The email of the user.
   def create
     @user = User.create(user_params)
     if @user.persisted?
