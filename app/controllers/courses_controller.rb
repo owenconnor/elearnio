@@ -29,7 +29,7 @@ class CoursesController < ApplicationController
   # GET /courses/:id
   def show
     course = Course.find(params[:id])
-    if course.persisted?
+    if course.valid?
       render json: course, serializer: CourseShowSerializer, status: :ok
     else
       render json: { errors: course.errors.full_messages, params: course_params }, status: :unprocessable_entity
