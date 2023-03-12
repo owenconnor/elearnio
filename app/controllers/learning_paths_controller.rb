@@ -1,4 +1,4 @@
-class V1::LearningPathsController < ApplicationController
+class LearningPathsController < ApplicationController
 
   def record_not_found(e)
     # render json: { error: 'Course not found' }, status: :not_found
