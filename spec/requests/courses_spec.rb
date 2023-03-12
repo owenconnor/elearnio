@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe V1::CoursesController, type: :request do
-  let(:user) { create :user, :with_author_profile }
+  let(:user) { create :user }
   let(:course) { create :course }
   let(:valid_params) { {"title": "Mega Dance Party", "author_profile_id": user.author_profile.id } }
 
@@ -110,12 +110,12 @@ RSpec.describe V1::CoursesController, type: :request do
 
     end
 
-    context "with learning paths" do
-      let!(:course_with_learning_paths) { create :course, :with_learning_paths}
-      it 'returns the course with learning paths' do
-        get "/v1/courses/#{course_with_learning_paths.id}"
+    context "with learning path" do
+      let!(:course_with_learning_path) { create :course, :with_learning_path }
+      it 'returns the course with learning path' do
+        get "/v1/courses/#{course_with_learning_path.id}"
         json_response = JSON.parse(response.body)
-        expect(json_response['learning_paths'].length).to eq(course_with_learning_paths.learning_paths.length)
+        expect(json_response['learning_paths'].length).to eq(course_with_learning_path.learning_paths.length)
       end
 
     end
