@@ -1,4 +1,15 @@
+
+# This model represents a student's enrollment in a course. It links a student profile to a course.
 class CourseEnrollment < ApplicationRecord
+  #@!attribute status
+  #  @return [String] The status of the enrollment. Can be "enrolled" or "completed".
+  # @!attribute id
+  # @return [Integer] The ID of the enrollment.
+  # @!attribute course
+  # @return [Course] The course the student is enrolled in.
+  # @!attribute student_profile
+  # @return [StudentProfile] The student profile of the student enrolled in the course.
+
   belongs_to :course
   belongs_to :student_profile
 
@@ -7,12 +18,5 @@ class CourseEnrollment < ApplicationRecord
   validates :course_id, uniqueness: { scope: :student_profile_id }
   validates :status, inclusion: { in: %w(enrolled completed) }
 
-  validate :student_profile_is_not_already_enrolled_in_course, on: :create
-
-  def student_profile_is_not_already_enrolled_in_course
-    if CourseEnrollment.where(course: course, student_profile: student_profile).any?
-      errors.add(:student_profile, "is already enrolled in this course")
-    end
-  end
 end
 
