@@ -11,5 +11,13 @@ class AuthorProfile < ApplicationRecord
   belongs_to :user
   has_many :courses
 
+  before_destroy :transfer_courses
+
   validates :user_id, presence: true
+  validates :user_id, uniqueness: true
+
+  def transfer_courses
+    courses.update_all(author_profile_id: AuthorProfile.all.sample.id)
+  end
+
 end
