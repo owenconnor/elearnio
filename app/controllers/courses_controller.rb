@@ -1,4 +1,4 @@
-class V1::CoursesController < ApplicationController
+class CoursesController < ApplicationController
 
   # The following is a custom error handler for ActiveRecord::RecordNotFound
   # It will return a 404 status code and a JSON response with the error message
@@ -13,7 +13,7 @@ class V1::CoursesController < ApplicationController
   # If there are no courses, it will return an empty array
   # If there is an error, it will return a 404 status code and a JSON response with the error message
   # and the request parameters
-  # GET /v1/courses
+  # GET /courses
   def index
     courses = Course.includes(:author_profile, :student_profiles, :learning_paths).all
     render json: courses, each_serializer: CourseIndexSerializer, status: :ok
@@ -26,7 +26,7 @@ class V1::CoursesController < ApplicationController
   # It will return a 200 status code and a JSON response with the course
   # If the course is not found, it will return a 404 status code and a JSON response with the error message
   # and the request parameters
-  # GET /v1/courses/:id
+  # GET /courses/:id
   def show
     course = Course.find(params[:id])
     if course.persisted?
@@ -43,7 +43,7 @@ class V1::CoursesController < ApplicationController
   # It will return a 201 status code and a JSON response with the newly created course
   # If the course is not created, it will return a 422 status code and a JSON response with the error message
   # and the request parameters
-  # POST /v1/courses
+  # POST /courses
   #
   def create
     course = Course.create(course_params)
@@ -61,7 +61,7 @@ class V1::CoursesController < ApplicationController
   # and the request parameters
   # if the course is not found, it will return a 404 status code and a JSON response with the error message
   # and the request parameters
-  # PUT /v1/courses/:id
+  # PUT /courses/:id
   def update
     course = Course.find(params[:id])
     if course.update(course_params)

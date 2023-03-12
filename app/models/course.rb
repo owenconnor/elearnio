@@ -2,25 +2,18 @@
 class Course < ApplicationRecord
   # @!attribute [r] id
   #   @return [Integer] the unique identifier for the course
-
   # @!attribute [rw] title
   #   @return [String] the title of the course
-
   # @!attribute [rw] author_profile_id
   #   @return [Integer] the unique identifier for the author of the course
-
   # @!attribute [rw] created_at
   #   @return [DateTime] the date and time the course was created
-
   # @!attribute [rw] updated_at
   #   @return [DateTime] the date and time the course was last updated
-
   # @!attribute [rw] course_enrollments
   #   @return [Array<CourseEnrollment>] the course enrollments for the course
-
   # @!attribute [rw] student_profiles
   #   @return [Array<StudentProfile>] the student profiles that are enrolled in the course
-
   # @!attribute [rw] learning_paths
   #   @return [Array<LearningPath>] the learning paths that the course is a part of
 
@@ -44,18 +37,21 @@ class Course < ApplicationRecord
     student_profiles
   end
 
+  #@!method enrolled?(student_profile)
   # @param student_profile [StudentProfile] the student profile to check
   # @return [Boolean] true if the student is enrolled in the course, false otherwise
+  # A method which checks if a student is enrolled in a course
   def enrolled?(student_profile)
     student_profiles.include?(student_profile)
   end
 
+  #@!method enrolled_student(student_profile)
   # @param student_profile [StudentProfile] the student profile to enroll
   # @return [Boolean] false if the student is already enrolled in the course
   # @return [Boolean] false if the student is the author of the course
   # @return [Boolean] false if the student has already completed the course
   # @return [CourseEnrollment] the course enrollment for the student if successful
-
+  # A method which enrolls a student in a course
   def enroll_student(student_profile)
     if student_profile.user.author_profile.course_ids.include?(id)
       errors.add(:base,"Student is the author of this course")
@@ -71,25 +67,28 @@ class Course < ApplicationRecord
     end
   end
 
+  #@!method currently_enrolled?(student_profile)
   # @param student_profile [StudentProfile] the student profile to check if enrolled
   # @return [Boolean] true if the student is currently enrolled in the course, false otherwise
-
   # A method which checks if a student is currently enrolled in a course
   def currently_enrolled?(student_profile)
     Course.active_courses_by_student(student_profile.id).map(&:id).include?(id)
   end
 
+  # @!method completed_by_student?(student_profile)
   # @param student_profile [StudentProfile] the student profile to check if completed
   # @return [Boolean] true if the student has completed the course, false otherwise
-
   # A method which checks if a student has completed a course
   def completed_by_student?(student_profile)
     Course.completed_by_student(student_profile.id).map(&:id).include?(id)
   end
 
+  # @!method complete_course(student_profile)
   # @param student_profile [StudentProfile] the student profile to complete the course
   # @return [Boolean] false if the student is not enrolled in the course
   # @return [Boolean] false if the student has already completed the course
+
+  # A method which completes a course for a student
   def complete_course(student_profile)
     if currently_enrolled?(student_profile)
       course_enrollments.where(student_profile_id: student_profile.id, status: "enrolled").update(status: "completed")
