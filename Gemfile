@@ -37,6 +37,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'rubocop'
   gem 'bullet'
+  gem 'simplecov', require: false
 end
 
 group :test do
