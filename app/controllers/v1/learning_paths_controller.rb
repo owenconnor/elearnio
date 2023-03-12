@@ -47,6 +47,15 @@ class V1::LearningPathsController < ApplicationController
     render json: { error: e.to_s  }, status: :unprocessable_entity
   end
 
+  def subscribe
+    learning_path = LearningPath.find(params[:id])
+    student_profile = StudentProfile.find(params[:student_profile_id])
+    learning_path.subscribe_student(student_profile)
+    render json: learning_path, serializer: LearningPathShowSerializer, status: :ok
+  rescue ActiveRecord::RecordNotFound => e
+    record_not_found(e)
+  end
+
   private
   def learning_path_params
     params.require(:learning_path).permit(:title)
