@@ -5,8 +5,8 @@ class LearningPathsController < ApplicationController
     render json: { params: params, error: e.to_s }, status: :not_found
   end
   def index
-    learning_paths = LearningPath.all
-    render json: learning_paths, status: :ok
+    learning_paths = LearningPath.includes(:courses, :student_profiles).all
+    render json: learning_paths, each_serializer: LearningPathIndexSerializer, status: :ok
   end
 
   def show
