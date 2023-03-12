@@ -30,8 +30,6 @@ RSpec.describe "LearningPaths", type: :request do
       expect(json_response['title']).to eq(learning_path.title)
     end
 
-
-
     it 'returns a 200 status code' do
       get "/v1/learning_paths/#{learning_path.id}"
       expect(response.status).to eq(200)
@@ -42,6 +40,14 @@ RSpec.describe "LearningPaths", type: :request do
         get "/v1/learning_paths/#{learning_path_with_courses.id}"
         json_response = JSON.parse(response.body)
         expect(json_response['courses'].length).to eq(learning_path_with_courses.courses.length)
+      end
+    end
+
+    context "with and invalid id" do
+      it 'returns a 404 status code' do
+        get "/v1/learning_paths/999999"
+        expect(response.status).to eq(404)
+        expect(response.body).to include("Couldn't find LearningPath with 'id'=999999")
       end
     end
   end
@@ -106,6 +112,22 @@ RSpec.describe "LearningPaths", type: :request do
         put "/v1/learning_paths/#{learning_path.id}", params: { learning_path: invalid_attributes }
         expect(response.status).to eq(422)
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:learning_path) { create(:learning_path) }
+
+    it 'deletes the learning_path' do
+      expect {
+        delete "/v1/learning_paths/#{learning_path.id}"
+      }.to change(LearningPath, :count).by(-1)
+    end
+
+    it 'returns a success message' do
+      delete "/v1/learning_paths/#{learning_path.id}"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to eq({"message": 'Learning Path deleted successfully'}.to_json)
     end
   end
 end
