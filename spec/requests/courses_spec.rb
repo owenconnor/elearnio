@@ -238,7 +238,6 @@ RSpec.describe CoursesController, type: :request do
         it 'returns an unprocessable entity error' do
           post "/courses/#{course_to_be_enrolled.id}/enroll", params: enroll_params
           json_response = JSON.parse(response.body)
-          pp json_response
           expect(response).to have_http_status(:unprocessable_entity)
           expect(json_response["errors"].join).to eq("Student is already enrolled in this course")
         end
