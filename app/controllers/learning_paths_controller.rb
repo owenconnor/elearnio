@@ -91,6 +91,13 @@ class LearningPathsController < ApplicationController
   # and the request parameters
   # POST /learning_paths/:id/subscribe/:student_profile_id
   # @param [Integer] id The id of the learning path to be subscribed to
+  # @param [Integer] student_profile_id The id of the student profile to be subscribed
+  # @return [LearningPath] The updated learning path
+  # @example
+  #  POST /learning_paths/1/subscribe
+  # {
+  #  "student_profile_id": 1,
+  # }
   def subscribe
     learning_path = LearningPath.find(params[:id])
     student_profile = StudentProfile.find(params[:student_profile_id])

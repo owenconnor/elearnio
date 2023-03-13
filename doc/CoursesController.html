@@ -121,7 +121,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#complete-instance_method" title="#complete (instance method)">#<strong>complete</strong>  &#x21d2; Object </a>
+      <a href="#complete-instance_method" title="#complete (instance method)">#<strong>complete</strong>  &#x21d2; JSON </a>
     
 
     
@@ -136,7 +136,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The complete action will mark a course as completed for a student It will return a 200 status code and a JSON response with the message If the course is not completed, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters.</p>
+<p>The complete action will mark a course as completed for a student It will return a 200 status code and a JSON response with the message If the course is not completed, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters POST /courses/:id/complete { “student_profile_id”: 1 }.</p>
 </div></span>
   
 </li>
@@ -145,7 +145,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#create-instance_method" title="#create (instance method)">#<strong>create</strong>  &#x21d2; Object </a>
+      <a href="#create-instance_method" title="#create (instance method)">#<strong>create</strong>  &#x21d2; JSON </a>
     
 
     
@@ -160,7 +160,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The create action will create a new course It will call the CourseShowSerializer to return the newly created course It will return a 201 status code and a JSON response with the newly created course If the course is not created, it will return a 422 status code and a JSON response with the error message and the request parameters POST /courses.</p>
+<p>The create action will create a new course It will call the CourseShowSerializer to return the newly created course It will return a 201 status code and a JSON response with the newly created course If the course is not created, it will return a 422 status code and a JSON response with the error message and the request parameters POST /courses { “course”: { “title”: “New Course”, “author_profile_id”: 1 } }.</p>
 </div></span>
   
 </li>
@@ -208,7 +208,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The enroll action will enroll a student in a course by creating a course enrollment object It will return a 201 status code and a JSON response with the course enrollment If the course is not enrolled, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters.</p>
+<p>The enroll action will enroll a student in a course by creating a course enrollment object It will return a 201 status code and a JSON response with the course enrollment If the course is not enrolled, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters {  “student_profile_id”: 1 }.</p>
 </div></span>
   
 </li>
@@ -289,7 +289,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#update-instance_method" title="#update (instance method)">#<strong>update</strong>  &#x21d2; Object </a>
+      <a href="#update-instance_method" title="#update (instance method)">#<strong>update</strong>  &#x21d2; JSON </a>
     
 
     
@@ -304,7 +304,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The update action will update an existing course It will call the CourseShowSerializer to return the updated course It will return a 200 status code and a JSON response with the updated course If the course is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters PUT /courses/:id.</p>
+<p>The update action will update an existing course It will call the CourseShowSerializer to return the updated course It will return a 200 status code and a JSON response with the updated course If the course is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters PUT /courses/:id { “course”: { “title”: “New Title” } }.</p>
 </div></span>
   
 </li>
@@ -329,7 +329,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="complete-instance_method">
   
-    #<strong>complete</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>complete</strong>  &#x21d2; <tt>JSON</tt> 
   
 
   
@@ -338,13 +338,31 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The complete action will mark a course as completed for a student It will return a 200 status code and a JSON response with the message If the course is not completed, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters</p>
+<p>The complete action will mark a course as completed for a student It will return a 200 status code and a JSON response with the message If the course is not completed, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters POST /courses/:id/complete { “student_profile_id”: 1 }</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>JSON</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>JSON response with the message</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -352,22 +370,22 @@
       <pre class="lines">
 
 
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140</pre>
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 128</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 154</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_complete'>complete</span>
   <span class='id identifier rubyid_course'>course</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Course.html" title="Course (class)">Course</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -390,7 +408,7 @@
       <div class="method_details ">
   <h3 class="signature " id="create-instance_method">
   
-    #<strong>create</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>create</strong>  &#x21d2; <tt>JSON</tt> 
   
 
   
@@ -399,13 +417,31 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The create action will create a new course It will call the CourseShowSerializer to return the newly created course It will return a 201 status code and a JSON response with the newly created course If the course is not created, it will return a 422 status code and a JSON response with the error message and the request parameters POST /courses</p>
+<p>The create action will create a new course It will call the CourseShowSerializer to return the newly created course It will return a 201 status code and a JSON response with the newly created course If the course is not created, it will return a 422 status code and a JSON response with the error message and the request parameters POST /courses { “course”: { “title”: “New Course”, “author_profile_id”: 1 } }</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>JSON</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>JSON response with the newly created course</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -413,17 +449,17 @@
       <pre class="lines">
 
 
-51
-52
-53
-54
-55
-56
-57
-58</pre>
+58
+59
+60
+61
+62
+63
+64
+65</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
   <span class='id identifier rubyid_course'>course</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Course.html" title="Course (class)">Course</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_course_params'>course_params</span><span class='rparen'>)</span>
@@ -464,19 +500,19 @@
       <pre class="lines">
 
 
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97</pre>
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='id identifier rubyid_course'>course</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Course.html" title="Course (class)">Course</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -505,15 +541,41 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The enroll action will enroll a student in a course by creating a course enrollment object It will return a 201 status code and a JSON response with the course enrollment If the course is not enrolled, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters</p>
+<p>The enroll action will enroll a student in a course by creating a course enrollment object It will return a 201 status code and a JSON response with the course enrollment If the course is not enrolled, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters 
+<pre class="code ruby"><code class="ruby">&quot;student_profile_id&quot;: 1
+</code></pre>
+
+<p></p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>POST /courses/:id/enroll</code></pre>
+    
+  </div>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>JSON</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>JSON response with the course enrollment</p>
+</div>
+      
+    </li>
   
     <li>
       
@@ -555,21 +617,21 @@
       <pre class="lines">
 
 
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119</pre>
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 108</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_enroll'>enroll</span>
   <span class='id identifier rubyid_course'>course</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Course.html" title="Course (class)">Course</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -734,7 +796,7 @@
       <div class="method_details ">
   <h3 class="signature " id="update-instance_method">
   
-    #<strong>update</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>update</strong>  &#x21d2; <tt>JSON</tt> 
   
 
   
@@ -743,13 +805,31 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The update action will update an existing course It will call the CourseShowSerializer to return the updated course It will return a 200 status code and a JSON response with the updated course If the course is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters PUT /courses/:id</p>
+<p>The update action will update an existing course It will call the CourseShowSerializer to return the updated course It will return a 200 status code and a JSON response with the updated course If the course is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters if the course is not found, it will return a 404 status code and a JSON response with the error message and the request parameters PUT /courses/:id { “course”: { “title”: “New Title” } }</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>JSON</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>JSON response with the updated course</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -757,19 +837,19 @@
       <pre class="lines">
 
 
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78</pre>
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 69</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/courses_controller.rb', line 83</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
   <span class='id identifier rubyid_course'>course</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Course.html" title="Course (class)">Course</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -791,7 +871,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Mar 13 01:41:27 2023 by
+  Generated on Mon Mar 13 02:04:50 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

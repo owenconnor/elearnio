@@ -250,7 +250,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#subscribe-instance_method" title="#subscribe (instance method)">#<strong>subscribe</strong>  &#x21d2; Object </a>
+      <a href="#subscribe-instance_method" title="#subscribe (instance method)">#<strong>subscribe</strong>  &#x21d2; LearningPath </a>
     
 
     
@@ -265,7 +265,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>The subscribe action will subscribe a student to a learning path by creating a new [LearningPathEnrollment] It will call the LearningPathShowSerializer to return the updated learning path It will return a 200 status code and a JSON response with the updated learning path If the learning path is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters POST /learning_paths/:id/subscribe/:student_profile_id.</p>
+<p>The subscribe action will subscribe a student to a learning path by creating a new [LearningPathEnrollment] It will call the LearningPathShowSerializer to return the updated learning path It will return a 200 status code and a JSON response with the updated learning path If the learning path is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters POST /learning_paths/:id/subscribe/:student_profile_id {  “student_profile_id”: 1, }.</p>
 </div></span>
   
 </li>
@@ -604,7 +604,7 @@
       <div class="method_details ">
   <h3 class="signature " id="subscribe-instance_method">
   
-    #<strong>subscribe</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>subscribe</strong>  &#x21d2; <tt><span class='object_link'><a href="LearningPath.html" title="LearningPath (class)">LearningPath</a></span></tt> 
   
 
   
@@ -613,13 +613,25 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>The subscribe action will subscribe a student to a learning path by creating a new [LearningPathEnrollment] It will call the LearningPathShowSerializer to return the updated learning path It will return a 200 status code and a JSON response with the updated learning path If the learning path is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters POST /learning_paths/:id/subscribe/:student_profile_id</p>
+<p>The subscribe action will subscribe a student to a learning path by creating a new [LearningPathEnrollment] It will call the LearningPathShowSerializer to return the updated learning path It will return a 200 status code and a JSON response with the updated learning path If the learning path is not updated, it will return a 422 status code and a JSON response with the error message and the request parameters POST /learning_paths/:id/subscribe/:student_profile_id 
+<pre class="code ruby"><code class="ruby">&quot;student_profile_id&quot;: 1,
+</code></pre>
+
+<p></p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>POST /learning_paths/1/subscribe</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -638,8 +650,42 @@
       
     </li>
   
+    <li>
+      
+        <span class='name'>student_profile_id</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The id of the student profile to be subscribed</p>
+</div>
+      
+    </li>
+  
 </ul>
 
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="LearningPath.html" title="LearningPath (class)">LearningPath</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The updated learning path</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -647,17 +693,17 @@
       <pre class="lines">
 
 
-94
-95
-96
-97
-98
-99
-100
-101</pre>
+101
+102
+103
+104
+105
+106
+107
+108</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/controllers/learning_paths_controller.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'app/controllers/learning_paths_controller.rb', line 101</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_subscribe'>subscribe</span>
   <span class='id identifier rubyid_learning_path'>learning_path</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="LearningPath.html" title="LearningPath (class)">LearningPath</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -752,7 +798,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Mar 13 01:41:27 2023 by
+  Generated on Mon Mar 13 02:04:51 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

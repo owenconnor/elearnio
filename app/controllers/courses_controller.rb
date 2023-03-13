@@ -47,7 +47,14 @@ class CoursesController < ApplicationController
   # If the course is not created, it will return a 422 status code and a JSON response with the error message
   # and the request parameters
   # POST /courses
-  #
+  # @example
+  # {
+  # "course": {
+  # "title": "New Course",
+  # "author_profile_id": 1
+  # }
+  # }
+  # @return [JSON] JSON response with the newly created course
   def create
     course = Course.create(course_params)
     if course.persisted?
@@ -66,6 +73,13 @@ class CoursesController < ApplicationController
   # if the course is not found, it will return a 404 status code and a JSON response with the error message
   # and the request parameters
   # PUT /courses/:id
+  # @example
+  # {
+  # "course": {
+  # "title": "New Title"
+  # }
+  # }
+  # @return [JSON] JSON response with the updated course
   def update
     course = Course.find(params[:id])
     if course.update(course_params)
@@ -105,6 +119,12 @@ class CoursesController < ApplicationController
   # and the request parameters
   # @return [JSON] JSON response with the course enrollment
   # @raise [ActiveRecord::RecordNotFound] if the course with the specified ID does not exist
+  # @example
+  #  POST /courses/:id/enroll
+  # {
+  #  "student_profile_id": 1
+  # }
+  # @return [JSON] JSON response with the course enrollment
   def enroll
     course = Course.find(params[:id])
     student_profile = StudentProfile.find(params[:student_profile_id])
@@ -125,6 +145,12 @@ class CoursesController < ApplicationController
   # and the request parameters
   # if the course is not found, it will return a 404 status code and a JSON response with the error message
   # and the request parameters
+  # @example
+  # POST /courses/:id/complete
+  # {
+  # "student_profile_id": 1
+  # }
+  # @return [JSON] JSON response with the message
   def complete
     course = Course.find(params[:id])
     student_profile = StudentProfile.find(params[:student_profile_id])
