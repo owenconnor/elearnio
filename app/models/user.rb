@@ -21,8 +21,8 @@ class User < ApplicationRecord
   # @!attribute student_profile_id
   # @return [Integer] The ID of the student profile of the user if they are a student.
 
-  has_one :author_profile
-  has_one :student_profile
+  has_one :author_profile, dependent: :destroy
+  has_one :student_profile, dependent: :destroy
 
   validates :email, presence: true, uniqueness: true
   validates :first_name, presence: true
