@@ -14,10 +14,12 @@ class AuthorProfile < ApplicationRecord
   before_destroy :transfer_courses
 
   validates :user_id, presence: true
-  validates :user_id, uniqueness: true
+  validates :user_id, uniqueness: true, on: [:create, :update]
 
   def transfer_courses
-    courses.update_all(author_profile_id: AuthorProfile.all.sample.id)
+    new_author_profile = AuthorProfile.all.sample
+    Rails.logger.info "Transferring courses from #{self.id} to #{new_author_profile.id}"
+    courses.update_all(author_profile_id: new_author_profile)
   end
 
 end
