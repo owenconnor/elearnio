@@ -186,10 +186,10 @@ RSpec.describe CoursesController, type: :request do
       end
 
       it 'returns an unprocessable entity error' do
-        #TODO: why could a course not be deleted?
         delete "/courses/#{course_to_be_deleted.id}"
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to match_json_expression({ error: 'Course could not be deleted' })
+        expect(json_response['errors']).to eq('Course could not be deleted')
       end
     end
   end

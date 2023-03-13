@@ -75,14 +75,14 @@ class CoursesController < ApplicationController
 
 
   def destroy
-    #TODO: not quite right, view specs
     course = Course.find(params[:id])
-    course.destroy
-    render json: { message: 'Course deleted successfully' }, status: :ok
+    if course.destroy
+      render json: { message: 'Course deleted successfully' }, status: :ok
+    else
+      render json: { errors: 'Course could not be deleted', params: params }, status: :unprocessable_entity
+    end
   rescue ActiveRecord::RecordNotFound => e
     record_not_found(e)
-  rescue ActiveRecord::RecordNotDestroyed => e
-    render json: { error: e.to_s  }, status: :unprocessable_entity
   end
 
   def enroll
