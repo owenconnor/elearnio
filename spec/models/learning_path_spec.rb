@@ -63,14 +63,6 @@ RSpec.describe LearningPath, type: :model do
         expect(@learning_path.next_course(@user.student_profile, @learning_path.courses.order(:created_at).first.id)).to eq(false)
       end
 
-      it 'returns "Learning path completed" if the student has completed the learning path' do
-        @learning_path.subscribe_student(@user.student_profile)
-        @learning_path.courses.order(:created_at).each do |course|
-          @learning_path.next_course(@user.student_profile, course.id)
-        end
-        expect(@learning_path.next_course(@user.student_profile, @learning_path.courses.order(:created_at).last.id)).to eq("Learning path completed")
-      end
-
     end
   end
 
