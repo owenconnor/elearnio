@@ -34,7 +34,7 @@ test/*/.keep
 .env
 
 #Ignore doc folder
-/doc/*
-doc/*
-.yardoc
+#/doc/*
+#doc/*
+#.yardoc
 
