@@ -4,12 +4,8 @@ class Course < ApplicationRecord
   #   @return [Integer] the unique identifier for the course
   # @!attribute [rw] title
   #   @return [String] the title of the course
-  # @!attribute [rw] author_profile_id
-  #   @return [Integer] the unique identifier for the author of the course
-  # @!attribute [rw] created_at
-  #   @return [DateTime] the date and time the course was created
-  # @!attribute [rw] updated_at
-  #   @return [DateTime] the date and time the course was last updated
+  # @!attribute [rw] author_profile
+  #   @return [AuthorProfile] the author profile of the course
   # @!attribute [rw] course_enrollments
   #   @return [Array<CourseEnrollment>] the course enrollments for the course
   # @!attribute [rw] student_profiles
@@ -45,9 +41,7 @@ class Course < ApplicationRecord
 
   #@!method enrolled_student(student_profile)
   # @param student_profile [StudentProfile] the student profile to enroll
-  # @return [Boolean] false if the student is already enrolled in the course
-  # @return [Boolean] false if the student is the author of the course
-  # @return [Boolean] false if the student has already completed the course
+  # @return [Boolean] false if the student is already enrolled in the course, if the student is the author of the course or if the student has already completed the course
   # @return [CourseEnrollment] the course enrollment for the student if successful
   # A method which enrolls a student in a course
   def enroll_student(student_profile)
@@ -83,8 +77,7 @@ class Course < ApplicationRecord
 
   # @!method complete_course(student_profile)
   # @param student_profile [StudentProfile] the student profile to complete the course
-  # @return [Boolean] false if the student is not enrolled in the course
-  # @return [Boolean] false if the student has already completed the course
+  # @return [Boolean] false if the student is not enrolled in the course or if the student has already completed the course
 
   # A method which completes a course for a student
   def complete_course(student_profile)

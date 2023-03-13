@@ -7,6 +7,7 @@ class CoursesController < ApplicationController
     render json: { params: params, error: e.to_s }, status: :not_found
   end
 
+  #@!method
   # The index action will return a list of all courses
   # It will include the author, students, and learning paths
   # It will return a 200 status code and a JSON response with the list of courses
@@ -21,6 +22,7 @@ class CoursesController < ApplicationController
     record_not_found(e)
   end
 
+  #@!action show
   # The show action will return a single course
   # It will include the author, students, and learning paths
   # It will return a 200 status code and a JSON response with the course
@@ -38,6 +40,7 @@ class CoursesController < ApplicationController
     record_not_found(e)
   end
 
+  #@!method create
   # The create action will create a new course
   # It will call the CourseShowSerializer to return the newly created course
   # It will return a 201 status code and a JSON response with the newly created course
@@ -54,6 +57,7 @@ class CoursesController < ApplicationController
     end
   end
 
+  #@!method update
   # The update action will update an existing course
   # It will call the CourseShowSerializer to return the updated course
   # It will return a 200 status code and a JSON response with the updated course
@@ -73,7 +77,14 @@ class CoursesController < ApplicationController
     record_not_found(e)
   end
 
-
+  #@!method destroy
+  # The destroy action will delete an existing course
+  # It will return a 200 status code and a JSON response with the message
+  # If the course is not deleted, it will return a 422 status code and a JSON response with the error message
+  # and the request parameters
+  # if the course is not found, it will return a 404 status code and a JSON response with the error message
+  # and the request parameter
+  # DELETE /courses/:id
   def destroy
     course = Course.find(params[:id])
     if course.destroy
@@ -85,6 +96,15 @@ class CoursesController < ApplicationController
     record_not_found(e)
   end
 
+  #@!method enroll
+  # The enroll action will enroll a student in a course by creating a course enrollment object
+  # It will return a 201 status code and a JSON response with the course enrollment
+  # If the course is not enrolled, it will return a 422 status code and a JSON response with the error message
+  # and the request parameters
+  # if the course is not found, it will return a 404 status code and a JSON response with the error message
+  # and the request parameters
+  # @return [JSON] JSON response with the course enrollment
+  # @raise [ActiveRecord::RecordNotFound] if the course with the specified ID does not exist
   def enroll
     course = Course.find(params[:id])
     student_profile = StudentProfile.find(params[:student_profile_id])
@@ -98,6 +118,13 @@ class CoursesController < ApplicationController
     record_not_found(e)
   end
 
+  #@!method complete
+  # The complete action will mark a course as completed for a student
+  # It will return a 200 status code and a JSON response with the message
+  # If the course is not completed, it will return a 422 status code and a JSON response with the error message
+  # and the request parameters
+  # if the course is not found, it will return a 404 status code and a JSON response with the error message
+  # and the request parameters
   def complete
     course = Course.find(params[:id])
     student_profile = StudentProfile.find(params[:student_profile_id])
@@ -108,7 +135,6 @@ class CoursesController < ApplicationController
       # render json: course, status: :ok
       render json: { message: 'Course completed successfully' }, status: :ok
     end
-
   rescue ActiveRecord::RecordNotFound => e
     record_not_found(e)
   end
